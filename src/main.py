@@ -1,32 +1,74 @@
-import tkinter as tk
-
 from gui import login
-from tkinter.ttk import Frame, Button, Style
+from cryptography import DoubleCryptography, Cryptography
+from tkinter import messagebox as mb
 
-from cryptography import DoubleCryptography
+import signal
+import tkinter as tk
+import os
+import platform
 
-def to_string(data):
-	res = ""
-	for x in data:
-		res += chr(x)
-	return res
+# darwin is Mac OS X
+VALID_SYSTEMS = ['windows', 'darwin', 'linux', 'unix']
+
+def isHexOnly(check):
+	n = '0123456789abcdef'
+	h = check.lower()
+	for x in h:
+		if x not in n:
+			return False
+	return True
+
+def toString(data):
+	return ''.join([chr(x) for x in data])
+
+def deleteCache():
+	print("Deleting cache...")
+	i = 0
+	for x in os.listdir('tmp/'):
+		os.remove('tmp/' + x)
+		i += 1
+	print("Deleted", i, "cache files!")
+	return i
+
+# TODO:
+# Make this function delete all cache
+def shutdownHook(signal, event):
+	print("Shutting down...")
+	deleteCache()
+	exit(0)
 
 def main():
-	text = "hello world"
 
-	pad = [10,20,30]
-	xor = [77,56,24]
+	if platform.system().lower() not in VALID_SYSTEMS:
+		mb.showerror("Error", "You can't run Encryptor on this operating system!")
+		return
 
-	crypto = DoubleCryptography(pad,xor)
+	signal.signal(signal.SIGINT, shutdownHook)
 
-	print(to_string(crypto.decrypt(crypto.encrypt(text)))) # checks if the encryption system works
+	# non windowed process
 
+	if not os.path.isdir("data/"):
+		os.mkdir("data/", 493)
+
+	if not os.path.isdir("tmp/"):
+		os.mkdir("tmp/", 493)
+
+	# end non windowed process
 
 	root = tk.Tk()
-	
-	login.LoginWindow(root)
+	width = 400
+	height = 260
+	x = (root.winfo_screenwidth() // 2) - (width // 2)
+	y = (root.winfo_screenheight() // 2) - (height // 2)
+
+	root.geometry("{}x{}+{}+{}".format(width, height, x, y))
+	root.resizable(False, False)
+
+	app = login.LoginWindow([width,height],root)
 	root.mainloop()
 
-# Initialize the whole program
+
+# Initialize the entire program
 if __name__ == "__main__":
 	main()
+	shutdownHook(None, None)
