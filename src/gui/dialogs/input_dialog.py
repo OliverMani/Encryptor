@@ -16,7 +16,7 @@ class InputDialog(Tk):
 		self.title(title)
 
 		width = 200
-		height = 130
+		height = 70
 		x = (self.winfo_screenwidth() // 2) - (width // 2)
 		y = (self.winfo_screenheight() // 2) - (height // 2)
 
