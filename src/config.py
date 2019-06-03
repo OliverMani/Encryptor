@@ -2,6 +2,7 @@
 SALT_SIZE=10 #salt length
 MAX_KEY_SIZE=25*1024**2 #25MB key size
 THEME = 'default'
+DATA_FOLDER = 'data'
 
 #info
 NAME='Encryptor'

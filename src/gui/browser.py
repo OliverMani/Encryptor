@@ -157,7 +157,7 @@ class BrowserWindow(Frame):
 
 		encryptedSalt = crypto.encrypt(salt)
 
-		with open('data/' + name, 'wb') as file:
+		with open(config.DATA_FOLDER + name, 'wb') as file:
 			file.write(bytes(encryptedSalt))
 
 		del salt
@@ -175,7 +175,7 @@ class BrowserWindow(Frame):
 		keys = self.mkkey(config.SALT_SIZE)
 		crypto = cryptography.Cryptography(keys['pad'])
 
-		f = open('data/' + file, 'rb')
+		f = open(config.DATA_FOLDER + file, 'rb')
 		encryptedSalt = f.read(config.SALT_SIZE)
 		f.close()
 
@@ -228,7 +228,7 @@ class BrowserWindow(Frame):
 		del read
 		del crypto
 
-		with open('data/' + filename, 'ab') as write:
+		with open(config.DATA_FOLDER + filename, 'ab') as write:
 			write.write(bytes(encrypted))
 		del encrypted
 
@@ -239,7 +239,7 @@ class BrowserWindow(Frame):
 		if realname == None:
 			return
 		salt = self.getSaltOfFile(realname)
-		file = open('data/' + realname, 'rb')
+		file = open(config.DATA_FOLDER + realname, 'rb')
 		data = file.read()[config.SALT_SIZE:]
 		file.close()
 		keys = self.mkkey(len(data), salt)
@@ -253,10 +253,10 @@ class BrowserWindow(Frame):
 		del decrypted
 		del crypto
 
-		print(mbox.askyesno("Privacy warning", "This file will be written decrypted on your hard drive, do you want to continue?"))
-		if _open:
 
-			fileutils.openFileWithAnotherProgram('tmp/' + name) 
+		if _open:
+			if mbox.askyesno("Privacy warning", "This file has to be opened with another program, and the other program can do whatever it likes to do with the file, this file has also be written on the hard drive, which means that other programs on your computer can read the file DECRYPTED, do you want to continue?"):
+				fileutils.openFileWithAnotherProgram('tmp/' + name) 
 
 
 	def refresh(self):
@@ -265,7 +265,7 @@ class BrowserWindow(Frame):
 
 		i = 0
 		self.files.clear()
-		for x in os.listdir('data/'):
+		for x in os.listdir(config.DATA_FOLDER):
 			name = self.getDecryptedFileName(x)
 			if name != None:
 				self.tree.insert("", i, text=name, values=("File"))
@@ -287,7 +287,7 @@ class BrowserWindow(Frame):
 
 	def deleteFile(self, fakename):
 		realname = self.getEncryptedFileName(fakename)
-		os.remove('data/' + realname)
+		os.remove(config.DATA_FOLDER + realname)
 		self.refresh()
 
 	def renameFile(self, oldfakename, newfakename, refresh=True):
@@ -301,12 +301,8 @@ class BrowserWindow(Frame):
 		del keys
 		del crypto
 
-		if config.OS == 'windows':
-			newrealname = 'data\\' + newrealname
-			oldrealname = 'data\\' + oldrealname
-		else:
-			newrealname = 'data/' + newrealname
-			oldrealname = 'data/' + oldrealname
+		newrealname = config.DATA_FOLDER + newrealname
+		oldrealname = config.DATA_FOLDER + oldrealname
 
 		os.rename(oldrealname, newrealname)
 

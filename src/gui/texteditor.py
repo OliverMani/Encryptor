@@ -4,6 +4,7 @@ from tkinter.ttk import Frame
 import _cryptography as cryptography
 import key_generator as kg
 import config
+import main
 
 # TODO:
 # Display text
@@ -16,7 +17,7 @@ class TextEditor(Tk):
 		self.browser = browser
 
 		name = browser.getEncryptedFileName(self.file)
-		with open('data/' + name, 'rb') as read:
+		with open(config.DATA_FOLDER + name, 'rb') as read:
 			self.encryptedSalt = read.read(config.SALT_SIZE)
 		del name
 
@@ -35,7 +36,7 @@ class TextEditor(Tk):
 
 	def readDecryptedText(self):
 		realname = self.browser.getEncryptedFileName(self.file)
-		read = open('data/' + realname, 'rb')
+		read = open(config.DATA_FOLDER + realname, 'rb')
 		data = read()[config.SALT_SIZE:]
 		read.close()
 		salt = self.browser.getSaltOfFile(name)
@@ -45,6 +46,8 @@ class TextEditor(Tk):
 		del keys
 		decrypted = crypto.decrypt(data)
 		del crypto
+
+		return main.toString(decrypted)
 
 		
 
@@ -58,7 +61,7 @@ class TextEditor(Tk):
 		del keys
 		encrypted = crypto.encrypt(text)
 
-		with open('data/' + name, 'wb') as write:
+		with open(config.DATA_FOLDER + name, 'wb') as write:
 			write.write(bytes(list(self.encryptedSalt) + encrypted))
 
 		del crypto
