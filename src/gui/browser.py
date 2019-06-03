@@ -253,7 +253,9 @@ class BrowserWindow(Frame):
 		del decrypted
 		del crypto
 
+		print(mbox.askyesno("Privacy warning", "This file will be written decrypted on your hard drive, do you want to continue?"))
 		if _open:
+
 			fileutils.openFileWithAnotherProgram('tmp/' + name) 
 
 
