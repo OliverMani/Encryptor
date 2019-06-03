@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter.ttk import Frame, Button, Style, Label, Entry
 
+import config
+
 TEXT = None
 
 def getStringInput(title='', message='', onenter=None):
@@ -23,7 +25,7 @@ class InputDialog(Tk):
 
 		frame = Frame(self, relief=RAISED, borderwidth=1)
 		frame.style = Style()
-		frame.style.theme_use('default')
+		frame.style.theme_use(config.THEME)
 		frame.pack(fill=BOTH, expand=True)
 
 		message = Label(frame, text=message)
@@ -40,6 +42,8 @@ class InputDialog(Tk):
 		self.mainloop()
 
 	def onReturn(self, onenter):
-		if onenter != None:
-			onenter(self.entry.get())
+		text = self.entry.get()
 		self.destroy()
+		if onenter != None:
+			onenter(text)
+		

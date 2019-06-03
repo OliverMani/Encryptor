@@ -7,7 +7,6 @@ import tkinter as tk
 import os
 import platform
 
-# darwin is Mac OS X
 VALID_SYSTEMS = ['windows', 'darwin', 'linux', 'unix']
 
 def isHexOnly(check):
@@ -30,9 +29,7 @@ def deleteCache():
 	print("Deleted", i, "cache files!")
 	return i
 
-# TODO:
-# Make this function delete all cache
-def shutdownHook(signal, event):
+def shutdownHook(signal=None, event=None):
 	print("Shutting down...")
 	deleteCache()
 	exit(0)
@@ -65,8 +62,8 @@ def main():
 	root.resizable(False, False)
 
 	app = login.LoginWindow([width,height],root)
-	root.mainloop()
 
+	root.mainloop()
 
 # Initialize the entire program
 if __name__ == "__main__":

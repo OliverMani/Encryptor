@@ -1,8 +1,9 @@
 import math
 import hashlib
+import config
 
 # modifying this variable's value might mess up the entire decryption system
-MAX = 1024**3
+MAX = config.MAX_KEY_SIZE
 
 # used for testing purposes
 def match(a,b):
@@ -17,7 +18,7 @@ def match(a,b):
 
 def generateKeysOutOfPassword(password, length, salt='', unlimited=False):
 	if length > MAX and not unlimited: # 1 gb is the max
-		raise ValueError("The key size is limited to 1 GB, set 'unlimited' to True to create larger keys.")
+		raise ValueError("The key size is limited to " + str(MAX) + " bytes, set 'unlimited' to True to create larger keys.")
 
 	hlen = math.ceil(length / 64)
 

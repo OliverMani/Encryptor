@@ -1,0 +1,2 @@
+class ProcessWindow(Frame):
+	pass

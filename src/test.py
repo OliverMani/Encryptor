@@ -1,0 +1,1 @@
+(lambda:[lambda:x()for x in[print("Encryptor"), print("is"), print("COOL")]])()
