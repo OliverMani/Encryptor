@@ -10,7 +10,7 @@ import main
 # Display text
 
 class TextEditor(Tk):
-	def __init__(self, file, browser): # fake name
+	def __init__(self, file, browser, newfile=False): # fake name
 		super().__init__()
 		self.title("Editing encrypted file: " + file)
 		self.file = file
@@ -29,6 +29,10 @@ class TextEditor(Tk):
 
 		self.text.pack(fill=BOTH, expand=True)
 
+		if not newfile:
+			#self.text.delete(0,END)
+			self.text.insert(END, self.readDecryptedText())
+
 		self.mainloop()
 
 	def onKeyPress(self, event):
@@ -37,12 +41,12 @@ class TextEditor(Tk):
 	def readDecryptedText(self):
 		realname = self.browser.getEncryptedFileName(self.file)
 		read = open(config.DATA_FOLDER + realname, 'rb')
-		data = read()[config.SALT_SIZE:]
+		data = read.read()[config.SALT_SIZE:]
 		read.close()
-		salt = self.browser.getSaltOfFile(name)
-		keys = self.browser.mkkey(len(text) % kg.MAX, salt)
+		salt = self.browser.getSaltOfFile(realname)
+		keys = self.browser.mkkey(len(data) % kg.MAX, salt)
 		del salt
-		crypto = DoubleCryptography(keys['pad'], keys['xor'])
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		del keys
 		decrypted = crypto.decrypt(data)
 		del crypto

@@ -36,7 +36,7 @@ def shutdownHook(signal=None, event=None):
 
 def main():
 	config.OS = platform.system().lower()
-	config.DATA_FOLDER += '\\' if config.Os == 'windows' else '/'
+	config.DATA_FOLDER += '\\' if config.OS == 'windows' else '/'
 	if config.OS not in VALID_SYSTEMS:
 		mb.showerror("Error", "You can't run Encryptor on this operating system!")
 		return

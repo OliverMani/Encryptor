@@ -20,7 +20,26 @@ randomSalt = lambda: main.toString([random.generateRandomByte() for x in range(c
 getFileName = lambda _: ntpath.split(_)[1] or ntpath.basename(ntpath.split(_)[0])
 toHex = lambda _: bytes(main.toString(_), 'utf-8').hex() if type(_) is str else bytes(_).hex()
 
-IMAGES_EXTENTION = ['png','jpg','jpeg','gif']
+IMAGES_EXTENSION = ['png','jpg','jpeg','gif']
+
+TYPE_NAMES = {
+	'mp4':'Video',
+	'mov':'Video',
+	'webm':'Video',
+	'avi':'Video',
+	'png':'Photo',
+	'jpeg':'Photo',
+	'jpg':'Photo',
+	'gif':'Animated\ photo',
+	'exe':'Windows\ application',
+	'msi':'Windows\ installer',
+	'py':'Python\ script',
+	'js':'Javascript',
+	'html':'HTML\ web\ page',
+	'css':'CSS\ file',
+	'zip':'ZIP\ file',
+	'txt':'Text\ file'
+}
 
 class BrowserWindow(Frame):
 
@@ -72,7 +91,7 @@ class BrowserWindow(Frame):
 
 		# TODO
 		# Program texteditor window and open it when you create a file
-		create = Button(bline1, text="Create file", command=lambda: inp.getStringInput(title='Filename', message='Type in file name:', onenter=lambda i: [lambda:x() for x in [self.createFile(i, refresh=True), texteditor.TextEditor(i, self)]]))
+		create = Button(bline1, text="Create file", command=lambda: inp.getStringInput(title='Filename', message='Type in file name:', onenter=lambda i: [lambda:x() for x in [self.createFile(i, refresh=True), texteditor.TextEditor(i, self, True)]]))
 		create.pack(side=LEFT, fill=BOTH, expand=True)
 		upload = Button(bline1, text="Upload file", command=lambda: self.uploadFile(askopenfilename()))
 		upload.pack(side=LEFT, fill=BOTH, expand=True)
@@ -92,7 +111,7 @@ class BrowserWindow(Frame):
 		cache.pack(side=LEFT, fill=BOTH, expand=True)
 		self.alwaysOnTop = Checkbutton(bline4, text="Always on top", variable=self.onTop, command=self.setAlwaysOnTop)
 		self.alwaysOnTop.pack(side=LEFT, fill=BOTH)
-		search = Button(bline4, text="Search files") # no command yet
+		search = Button(bline4, text="Search files", command=lambda: inp.getStringInput(title='Search files', message="Input:", onenter=self.searchAndSelect))
 		search.pack(side=LEFT, fill=BOTH, expand=True)
 		fileTransfering = Button(bline4, text="File Transfering", state=DISABLED) # no command yet
 		fileTransfering.pack(side=RIGHT, fill=BOTH, expand=True)
@@ -268,7 +287,10 @@ class BrowserWindow(Frame):
 		for x in os.listdir(config.DATA_FOLDER):
 			name = self.getDecryptedFileName(x)
 			if name != None:
-				self.tree.insert("", i, text=name, values=("File"))
+				t = "File"
+				if '.' in name:
+					t = TYPE_NAMES.get(name[name.rfind('.')+1:]) or "File"
+				self.tree.insert("", i, text=name, values=(t))
 				i += 1
 		self.selected = None
 
@@ -309,19 +331,13 @@ class BrowserWindow(Frame):
 		if refresh:
 			self.refresh()
 
-
-
-
 	def setAlwaysOnTop(self):
 		self.master.attributes('-topmost', str(self.onTop.get()).lower())
 
-
-
-
-
-
-
-
-
-
-
+	def searchAndSelect(self, search):
+		for x in self.tree.get_children():
+			name = self.tree.item(x)['text']
+			if search in name:
+				self.tree.selection_set(x)
+				return
+		mbox.showinfo("Search", "No files found with '" + search + "' in the name!")
