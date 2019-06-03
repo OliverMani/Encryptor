@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.ttk import Frame
-from cryptography import DoubleCryptography
 
+import _cryptography as cryptography
 import key_generator as kg
 import config
 
@@ -54,7 +54,7 @@ class TextEditor(Tk):
 		salt = self.browser.getSaltOfFile(name)
 		keys = self.browser.mkkey(len(text) % kg.MAX, salt)
 
-		crypto = DoubleCryptography(keys['pad'], keys['xor'])
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		del keys
 		encrypted = crypto.encrypt(text)
 

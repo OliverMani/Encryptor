@@ -1,5 +1,4 @@
 from gui import login
-from cryptography import DoubleCryptography, Cryptography
 from tkinter import messagebox as mb
 
 import signal

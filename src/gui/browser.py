@@ -2,8 +2,8 @@ from tkinter import *
 from tkinter import messagebox as mbox
 from tkinter.ttk import Frame, Button, Style, Label, Entry, Treeview, Scrollbar, Checkbutton
 from tkinter.filedialog import askopenfilename
-from cryptography import Cryptography, DoubleCryptography
 
+import _cryptography as cryptography
 import key_generator as kg
 import randomness as random
 import main
@@ -80,7 +80,7 @@ class BrowserWindow(Frame):
 		openf.pack(side=LEFT, fill=BOTH, expand=True)
 		edit = Button(bline2, text="Edit file", command=lambda: texteditor.TextEditor(self.selected, self))
 		edit.pack(side=LEFT, fill=BOTH, expand=True)
-		explorer = Button(bline2, text="System explorer", command=lambda: fileutils.openFolder('data/'))
+		explorer = Button(bline2, text="System explorer", command=lambda: fileutils.openFolder('data'))
 		explorer.pack(side=LEFT, fill=BOTH, expand=True)
 		refresh = Button(bline2, text="Refresh", command=self.refresh)
 		refresh.pack(side=LEFT, fill=BOTH, expand=True)
@@ -96,7 +96,7 @@ class BrowserWindow(Frame):
 		search.pack(side=LEFT, fill=BOTH, expand=True)
 		fileTransfering = Button(bline4, text="File Transfering", state=DISABLED) # no command yet
 		fileTransfering.pack(side=RIGHT, fill=BOTH, expand=True)
-		quit = Button(bline5, text="Quit", command=main.shutdownHook)
+		quit = Button(bline5, text="Quit", command=self.onClose)
 		quit.pack(side=BOTTOM, fill=BOTH, expand=True)
 
 		self.fileAction = [openf, edit, delete, rename]
@@ -142,7 +142,7 @@ class BrowserWindow(Frame):
 		salt = randomSalt()
 
 		keys = self.mkkey(len(realname), salt)
-		crypto = DoubleCryptography(keys['pad'], keys['xor'])
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		name = toHex(crypto.encrypt(getFileName(realname)))
 
 		del keys
@@ -153,7 +153,7 @@ class BrowserWindow(Frame):
 			return self.createFile(realname)
 
 		keys = self.mkkey(config.SALT_SIZE)
-		crypto = Cryptography(keys['pad'])
+		crypto = cryptography.Cryptography(keys['pad'])
 
 		encryptedSalt = crypto.encrypt(salt)
 
@@ -173,7 +173,7 @@ class BrowserWindow(Frame):
 		if not main.isHexOnly(file):
 			return
 		keys = self.mkkey(config.SALT_SIZE)
-		crypto = Cryptography(keys['pad'])
+		crypto = cryptography.Cryptography(keys['pad'])
 
 		f = open('data/' + file, 'rb')
 		encryptedSalt = f.read(config.SALT_SIZE)
@@ -193,7 +193,7 @@ class BrowserWindow(Frame):
 		salt = self.getSaltOfFile(realname)
 
 		keys = self.mkkey(math.ceil(len(realname)/2), salt)
-		crypto = DoubleCryptography(keys['pad'], keys['xor'])
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		
 		name = main.toString(crypto.decrypt(bytes.fromhex(realname)))
 
@@ -219,7 +219,7 @@ class BrowserWindow(Frame):
 
 		salt = self.getSaltOfFile(filename)
 		keys = self.mkkey(len(data) % kg.MAX, salt)
-		crypto = DoubleCryptography(keys['pad'], keys['xor'])
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		del keys
 		encrypted = crypto.encrypt(data)
 
@@ -243,7 +243,7 @@ class BrowserWindow(Frame):
 		data = file.read()[config.SALT_SIZE:]
 		file.close()
 		keys = self.mkkey(len(data), salt)
-		crypto = DoubleCryptography(keys['pad'], keys['xor'])
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		del keys
 		decrypted = crypto.decrypt(data)
 		del data
@@ -280,6 +280,7 @@ class BrowserWindow(Frame):
 			x.configure(state=NORMAL)
 
 	def onClose(self, event=None):
+		self.master.destroy()
 		main.shutdownHook(None, None)
 
 	def deleteFile(self, fakename):
@@ -292,7 +293,7 @@ class BrowserWindow(Frame):
 		salt = self.getSaltOfFile(oldrealname)
 
 		keys = self.mkkey(len(newfakename), salt)
-		crypto = DoubleCryptography(keys['pad'], keys['xor'])
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		newrealname = toHex(crypto.encrypt(getFileName(realname)))
 
 		del keys
