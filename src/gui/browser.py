@@ -86,7 +86,7 @@ class BrowserWindow(Frame):
 		refresh.pack(side=LEFT, fill=BOTH, expand=True)
 		delete = Button(bline3, text="Delete file", command=lambda: self.deleteFile(self.selected))
 		delete.pack(side=LEFT, fill=BOTH, expand=True)
-		rename = Button(bline3, text="Rename file") # no command yet
+		rename = Button(bline3, text="Rename file", command=lambda: inp.getStringInput(title='Filename', message='Type in a new file name:', onenter=lambda i: self.renameFile(self.selected, i))) # no command yet
 		rename.pack(side=LEFT, fill=BOTH, expand=True)
 		cache = Button(bline3, text="Delete cache", command=lambda: mbox.showinfo("Cache", "Deleted " + str(main.deleteCache()) + " cache files!"))
 		cache.pack(side=LEFT, fill=BOTH, expand=True)
@@ -288,18 +288,28 @@ class BrowserWindow(Frame):
 		os.remove('data/' + realname)
 		self.refresh()
 
-	def renameFile(self, oldfakename, newfakename):
+	def renameFile(self, oldfakename, newfakename, refresh=True):
 		oldrealname = self.getEncryptedFileName(oldfakename)
 		salt = self.getSaltOfFile(oldrealname)
 
 		keys = self.mkkey(len(newfakename), salt)
 		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
-		newrealname = toHex(crypto.encrypt(getFileName(realname)))
+		newrealname = toHex(crypto.encrypt(newfakename))
 
 		del keys
 		del crypto
 
+		if config.OS == 'windows':
+			newrealname = 'data\\' + newrealname
+			oldrealname = 'data\\' + oldrealname
+		else:
+			newrealname = 'data/' + newrealname
+			oldrealname = 'data/' + oldrealname
+
 		os.rename(oldrealname, newrealname)
+
+		if refresh:
+			self.refresh()
 
 
 

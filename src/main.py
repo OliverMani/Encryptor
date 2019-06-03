@@ -5,6 +5,7 @@ import signal
 import tkinter as tk
 import os
 import platform
+import config
 
 VALID_SYSTEMS = ['windows', 'darwin', 'linux', 'unix']
 
@@ -34,7 +35,7 @@ def shutdownHook(signal=None, event=None):
 	exit(0)
 
 def main():
-
+	config.OS = platform.system().lower()
 	if platform.system().lower() not in VALID_SYSTEMS:
 		mb.showerror("Error", "You can't run Encryptor on this operating system!")
 		return
