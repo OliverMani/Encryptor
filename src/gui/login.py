@@ -4,7 +4,7 @@ from tkinter.ttk import Frame, Button, Style, Label, Entry
 from gui.browser import BrowserWindow
 from gui.dialogs.custom_message_dialog import PasswordWarning
 
-from passwordchecker import checkIfPasswordIsSafe
+import passwordchecker
 
 import config
 
@@ -43,7 +43,7 @@ class LoginWindow(Frame):
 	def login(self,event=None):
 		password = self.pwd.get()
 		
-		isSafe = checkIfPasswordIsSafe(password)
+		isSafe = passwordchecker.checkIfPasswordIsSafe(password)
 
 		goAhead = isSafe['safe']
 
