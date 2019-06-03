@@ -14,7 +14,7 @@ def openFileWithAnotherProgram(path):
 	system = platform.system().lower()
 	if system in WINDOWS:
 		# Windows only!!!
-		os.startfile(path)
+		os.startfile(path.replace('/', '\\'))
 	elif system in UNIX:
 		#only unix and unix-like systems
 		subprocess.call(['open', path])
