@@ -7,7 +7,7 @@ from tkinter import messagebox as mb
 
 
 WINDOWS = ['windows']
-UNIX = ['darwin', 'linux', 'solaris']
+UNIX = ['darwin', 'linux', 'unix']
 
 # cross-platform
 def openFileWithAnotherProgram(path):
