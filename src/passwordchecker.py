@@ -47,10 +47,10 @@ def checkIfPasswordIsSafe(password):
 		return {'safe':False, 'message':'The password contains only numbers'}
 	if removeChars(string.ascii_lowercase + '0123456789', password.lower()) == '':
 		return {'safe':False, 'message':'The password contains only letters and numbers'}
-	if not check('res/dictionary/english.txt', password):
-		return {'safe':False, 'message':'This password contains a word!'}
-	if not check('res/dictionary/popular_passwords.txt', password):
-		return {'safe':False, 'message':'This password can be cracked instantly!'}
+	#if not check('res/dictionary/english.txt', password):
+	#	return {'safe':False, 'message':'This password contains a word!'}
+	#if not check('res/dictionary/popular_passwords.txt', password):
+	#	return {'safe':False, 'message':'This password can be cracked instantly!'}
 	return {'safe':True, 'message':'Safe!'}
 
 # testing
