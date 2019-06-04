@@ -336,8 +336,8 @@ class BrowserWindow(Frame):
 
 	def searchAndSelect(self, search):
 		for x in self.tree.get_children():
-			name = self.tree.item(x)['text']
-			if search in name:
+			name = self.tree.item(x)['text'].lower()
+			if search in name.lower():
 				self.tree.selection_set(x)
 				return
 		mbox.showinfo("Search", "No files found with '" + search + "' in the name!")
