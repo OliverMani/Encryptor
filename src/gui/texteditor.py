@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter.ttk import Frame
+from tkinter.ttk import Frame, Scrollbar
 
 import _cryptography as cryptography
 import key_generator as kg
@@ -27,7 +27,16 @@ class TextEditor(Tk):
 
 		self.text.bind('<KeyRelease>', self.onKeyPress)
 
+		scrollX = Scrollbar(self, orient="horizontal", command=self.text.xview)
+		scrollX.pack(side=BOTTOM, fill=X)
+
+		scrollY = Scrollbar(self, orient="vertical", command=self.text.yview)
+		scrollY.pack(side=RIGHT, fill=Y)
+
 		self.text.pack(fill=BOTH, expand=True)
+
+		self.text.configure(xscrollcommand=scrollX.set)
+		self.text.configure(yscrollcommand=scrollY.set)
 
 		if not newfile:
 			#self.text.delete(0,END)
