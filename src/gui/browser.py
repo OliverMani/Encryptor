@@ -50,6 +50,9 @@ class BrowserWindow(Frame):
 		#self.master.overrideredirect(True)
 		frame = Frame(self, relief=RAISED, borderwidth=1)
 		frame.pack(fill=BOTH,expand=True)
+
+		
+
 		self.tree = Treeview(frame)
 
 		self.selected = None
@@ -122,7 +125,14 @@ class BrowserWindow(Frame):
 		#self.directoryAction = [] # for future purposes
 
 
+		
+
+		scrollY = Scrollbar(frame, orient="vertical", command=self.tree.yview)
+		scrollY.pack(side=RIGHT, fill=Y)
+
 		self.tree.pack(fill=BOTH, expand=True)
+
+		self.tree.configure(yscrollcommand=scrollY.set)
 
 		self.refresh()
 
