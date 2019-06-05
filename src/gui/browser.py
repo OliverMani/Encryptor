@@ -99,7 +99,7 @@ class BrowserWindow(Frame):
 		openf.pack(side=LEFT, fill=BOTH, expand=True)
 		edit = Button(bline2, text="Edit file", command=lambda: texteditor.TextEditor(self.selected, self))
 		edit.pack(side=LEFT, fill=BOTH, expand=True)
-		explorer = Button(bline2, text="System explorer", command=lambda: fileutils.openFolder('data'))
+		explorer = Button(bline2, text="System explorer", command=lambda: fileutils.openFolder(config.DATA_FOLDER))
 		explorer.pack(side=LEFT, fill=BOTH, expand=True)
 		refresh = Button(bline2, text="Refresh", command=self.refresh)
 		refresh.pack(side=LEFT, fill=BOTH, expand=True)
@@ -168,7 +168,7 @@ class BrowserWindow(Frame):
 		del crypto
 
 		# if the file name does already exist in the os file system then we want to pick another name by running this function again
-		if os.path.isfile('data/' + name):
+		if os.path.isfile(config.DATA_FOLDER + name):
 			return self.createFile(realname)
 
 		keys = self.mkkey(config.SALT_SIZE)
@@ -267,7 +267,7 @@ class BrowserWindow(Frame):
 		decrypted = crypto.decrypt(data)
 		del data
 		name = self.getDecryptedFileName(realname)
-		with open('tmp/' + name, 'wb') as write:
+		with open(config.TMP_FOLDER + name, 'wb') as write:
 			write.write(bytes(decrypted))
 		del decrypted
 		del crypto
@@ -275,7 +275,7 @@ class BrowserWindow(Frame):
 
 		if _open:
 			if mbox.askyesno("Privacy warning", "This file has to be opened with another program, and the other program can do whatever it likes to do with the file, this file has also be written on the hard drive, which means that other programs on your computer can read the file DECRYPTED, do you want to continue?"):
-				fileutils.openFileWithAnotherProgram('tmp/' + name) 
+				fileutils.openFileWithAnotherProgram(config.TMP_FOLDER + name) 
 
 
 	def refresh(self):

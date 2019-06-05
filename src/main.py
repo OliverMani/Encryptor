@@ -23,8 +23,8 @@ def toString(data):
 def deleteCache():
 	print("Deleting cache...")
 	i = 0
-	for x in os.listdir('tmp/'):
-		os.remove('tmp/' + x)
+	for x in os.listdir(config.TMP_FOLDER):
+		os.remove(config.TMP_FOLDER + x)
 		i += 1
 	print("Deleted", i, "cache files!")
 	return i
@@ -37,6 +37,8 @@ def shutdownHook(signal=None, event=None):
 def main():
 	config.OS = platform.system().lower()
 	config.DATA_FOLDER += '\\' if config.OS == 'windows' else '/'
+	config.TMP_FOLDER += '\\' if config.OS == 'windows' else '/'
+
 	if config.OS not in VALID_SYSTEMS:
 		mb.showerror("Error", "You can't run Encryptor on this operating system!")
 		return
@@ -45,11 +47,11 @@ def main():
 
 	# non windowed process
 
-	if not os.path.isdir("data/"):
-		os.mkdir("data/", 493)
+	if not os.path.isdir(config.DATA_FOLDER):
+		os.mkdir(config.DATA_FOLDER, 493)
 
-	if not os.path.isdir("tmp/"):
-		os.mkdir("tmp/", 493)
+	if not os.path.isdir(config.TMP_FOLDER):
+		os.mkdir(config.TMP_FOLDER, 493)
 
 	# end non windowed process
 
@@ -69,4 +71,4 @@ def main():
 # Initialize the entire program
 if __name__ == "__main__":
 	main()
-	shutdownHook(None, None)
+shutdownHook(None, None)
