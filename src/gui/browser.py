@@ -257,6 +257,8 @@ class BrowserWindow(Frame):
 	def loadEncryptedFile(self, realname, _open=True):
 		if realname == None:
 			return
+		if not mbox.askyesno("Privacy warning", "This file has to be opened with another program, and the other program can do whatever it likes to do with the file, this file has also be written on the hard drive, which means that other programs on your computer can read the file DECRYPTED, do you want to continue?"):
+			return
 		salt = self.getSaltOfFile(realname)
 		file = open(config.DATA_FOLDER + realname, 'rb')
 		data = file.read()[config.SALT_SIZE:]
@@ -274,8 +276,7 @@ class BrowserWindow(Frame):
 
 
 		if _open:
-			if mbox.askyesno("Privacy warning", "This file has to be opened with another program, and the other program can do whatever it likes to do with the file, this file has also be written on the hard drive, which means that other programs on your computer can read the file DECRYPTED, do you want to continue?"):
-				fileutils.openFileWithAnotherProgram(config.TMP_FOLDER + name) 
+			fileutils.openFileWithAnotherProgram(config.TMP_FOLDER + name) 
 
 
 	def refresh(self):
