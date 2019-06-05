@@ -287,10 +287,11 @@ class BrowserWindow(Frame):
 		for x in os.listdir(config.DATA_FOLDER):
 			name = self.getDecryptedFileName(x)
 			if name != None:
+				size = os.path.getsize(config.DATA_FOLDER + x) - 10
 				t = "File"
 				if '.' in name:
 					t = TYPE_NAMES.get(name[name.rfind('.')+1:]) or "File"
-				self.tree.insert("", i, text=name, values=(t))
+				self.tree.insert("", i, text=name, values=(t, fileutils.getSizeString(size)))
 				i += 1
 		self.selected = None
 
