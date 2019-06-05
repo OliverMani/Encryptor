@@ -17,6 +17,12 @@ def match(a,b):
 	print("\nMatched chars:", c, "out of", max(len(a),len(b)), "characters! (", format(c / max(len(a),len(b))*100, '.2f'), "% )")
 
 
+def diff(a,b):
+	l = []
+	for x in range(min(len(a), len(b))):
+		l.append(b[x] - a[x])
+	return l
+
 
 sha512 = hashlib.sha512()
 sha256 = hashlib.sha256()
@@ -26,9 +32,11 @@ pwd = b"WrwigvreWfrw124Gwe"
 sha512.update(pwd)
 sha256.update(pwd)
 
-_sha256 = sha256.hexdigest()
+_sha256 = sha256.digest()
 sha256.update(pwd)
 
-print(list(sha256.digest()))
+#print(list(sha256.digest()))
+
 
 #match(sha512.hexdigest(), _sha256 + sha256.hexdigest())
+#print(diff(sha512.digest(), list(sha256.digest()) + list(_sha256)))
