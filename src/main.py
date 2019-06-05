@@ -35,6 +35,7 @@ def shutdownHook(signal=None, event=None):
 	exit(0)
 
 def main():
+
 	config.OS = platform.system().lower()
 	config.DATA_FOLDER += '\\' if config.OS == 'windows' else '/'
 	config.TMP_FOLDER += '\\' if config.OS == 'windows' else '/'
@@ -71,4 +72,4 @@ def main():
 # Initialize the entire program
 if __name__ == "__main__":
 	main()
-shutdownHook(None, None)
+	shutdownHook(None, None)
