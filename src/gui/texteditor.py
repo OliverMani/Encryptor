@@ -5,6 +5,7 @@ import _cryptography as cryptography
 import key_generator as kg
 import config
 import main
+import math
 
 # TODO:
 # Display text
@@ -53,7 +54,7 @@ class TextEditor(Tk):
 		data = read.read()[config.SALT_SIZE:]
 		read.close()
 		salt = self.browser.getSaltOfFile(realname)
-		keys = self.browser.mkkey(len(data) % kg.MAX, salt)
+		keys = self.browser.mkkey(min(len(data), kg.MAX), salt)
 		del salt
 		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		del keys

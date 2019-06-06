@@ -38,7 +38,10 @@ TYPE_NAMES = {
 	'html':'HTML\ web\ page',
 	'css':'CSS\ file',
 	'zip':'ZIP\ file',
-	'txt':'Text\ file'
+	'txt':'Text\ file',
+	'mp3':'Audio',
+	'ogg':'Audio',
+	'wav':'Audio'
 }
 
 class BrowserWindow(Frame):
@@ -241,25 +244,31 @@ class BrowserWindow(Frame):
 			return
 		filename = self.createFile(getFileName(path))
 
-		
-		read = open(path, 'rb')
-		data = read.read()
-		read.close()
+		size = os.path.getsize(path)
 
 		salt = self.getSaltOfFile(filename)
-		keys = self.mkkey(len(data) % kg.MAX, salt)
+
+		keys = self.mkkey(min(size-config.SALT_SIZE, config.MAX_KEY_SIZE), salt)
+
 		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
+
 		del keys
-		encrypted = crypto.encrypt(data)
+		
+		for data in fileutils.readInChunks(path):
+			
+			encrypted = crypto.encrypt(data)
 
-		# clean up memory
-		del data
-		del read
+			# clean up memory
+			del data
+			
+			with open(config.DATA_FOLDER + filename, 'ab') as write:
+				write.write(bytes(encrypted))
+			del encrypted
+
+		
 		del crypto
-
-		with open(config.DATA_FOLDER + filename, 'ab') as write:
-			write.write(bytes(encrypted))
-		del encrypted
+		
+		
 
 		self.refresh()
 
@@ -269,24 +278,32 @@ class BrowserWindow(Frame):
 			return
 		if not mbox.askyesno("Privacy warning", "This file has to be opened with another program, and the other program can do whatever it likes to do with the file, this file has also be written on the hard drive, which means that other programs on your computer can read the file DECRYPTED, do you want to continue?"):
 			return
-		salt = self.getSaltOfFile(realname)
-		file = open(config.DATA_FOLDER + realname, 'rb')
-		data = file.read()[config.SALT_SIZE:]
-		file.close()
-		keys = self.mkkey(len(data), salt)
-		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
-		del keys
-		decrypted = crypto.decrypt(data)
-		del data
+		
+		size = os.path.getsize(config.DATA_FOLDER + realname)
+
 		name = self.getDecryptedFileName(realname)
-		with open(config.TMP_FOLDER + name, 'wb') as write:
-			write.write(bytes(decrypted))
-		del decrypted
+
+		salt = self.getSaltOfFile(realname)
+
+		keys = self.mkkey(min(size-config.SALT_SIZE, config.MAX_KEY_SIZE), salt)
+
+		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
+
+		del keys
+		
+		with open(config.TMP_FOLDER + name, 'wb') as file:
+			for chunk in fileutils.readInChunks(config.DATA_FOLDER + realname, salted=True):
+				decrypted = crypto.decrypt(chunk)
+				del chunk
+				file.write(bytes(decrypted))
+				del decrypted
+				
 		del crypto
 
-
 		if _open:
-			fileutils.openFileWithAnotherProgram(config.TMP_FOLDER + name) 
+			fileutils.openFileWithAnotherProgram(config.TMP_FOLDER + name)
+
+
 
 
 	def refresh(self):

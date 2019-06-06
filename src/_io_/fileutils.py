@@ -2,6 +2,7 @@ import os
 import platform
 import subprocess
 import os.path
+import config
 
 from tkinter import messagebox as mb
 
@@ -39,3 +40,13 @@ def getSizeString(size, f='.2f'):
 		return str(format(size / (1024**2),f )) + "MB"
 	else:
 		return str(format(size / (1024**3), f)) + "GB"
+
+def readInChunks(path, chunk=config.FILE_CHUNK, salted=False):
+	with open(path, 'rb') as file:
+		if salted:
+			file.read(config.SALT_SIZE)
+		while True:
+			data = file.read(chunk)
+			if not data:
+				break
+			yield data
