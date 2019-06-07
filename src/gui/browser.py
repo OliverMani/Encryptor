@@ -14,6 +14,7 @@ import _io_.fileutils as fileutils
 import gui.texteditor as texteditor
 import math
 import config
+import gui.process as process
 
 
 randomSalt = lambda: main.toString([random.generateRandomByte() for x in range(config.SALT_SIZE)])
@@ -242,14 +243,14 @@ class BrowserWindow(Frame):
 	def uploadFile(self, path):
 		if path == "" or path == None:
 			return
-		filename = self.createFile(getFileName(path))
 
+
+
+		filename = self.createFile(getFileName(path))
 		size = os.path.getsize(path)
 
 		salt = self.getSaltOfFile(filename)
-
 		keys = self.mkkey(min(size-config.SALT_SIZE, config.MAX_KEY_SIZE), salt)
-
 		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 
 		del keys
@@ -267,8 +268,6 @@ class BrowserWindow(Frame):
 
 		
 		del crypto
-		
-		
 
 		self.refresh()
 
@@ -291,13 +290,19 @@ class BrowserWindow(Frame):
 
 		del keys
 		
+		built = 0
+
+
 		with open(config.TMP_FOLDER + name, 'wb') as file:
 			for chunk in fileutils.readInChunks(config.DATA_FOLDER + realname, salted=True):
 				decrypted = crypto.decrypt(chunk)
 				del chunk
 				file.write(bytes(decrypted))
 				del decrypted
-				
+
+				built += config.FILE_CHUNK
+
+
 		del crypto
 
 		if _open:
