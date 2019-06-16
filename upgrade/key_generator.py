@@ -3,7 +3,7 @@ import hashlib
 import config
 
 # modifying this variable's value might mess up the entire decryption system
-MAX = config.MAX_KEY_SIZE
+MAX = config.OLD_MAX_KEY_SIZE
 
 # used for testing purposes
 def match(a,b):
