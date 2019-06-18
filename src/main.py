@@ -7,7 +7,7 @@ import os
 import platform
 import config
 
-VALID_SYSTEMS = ['windows', 'darwin', 'linux', 'unix']
+VALID_SYSTEMS = ['windows', 'darwin', 'linux']
 
 def isHexOnly(check):
 	n = '0123456789abcdef'
@@ -35,7 +35,6 @@ def shutdownHook(signal=None, event=None):
 	exit(0)
 
 def main():
-
 	config.OS = platform.system().lower()
 	config.DATA_FOLDER += '\\' if config.OS == 'windows' else '/'
 	config.TMP_FOLDER += '\\' if config.OS == 'windows' else '/'

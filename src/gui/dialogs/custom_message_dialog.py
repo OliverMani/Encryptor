@@ -23,10 +23,6 @@ class PasswordWarning(object):
 
 		frame.pack(fill=tk.BOTH, expand=True)
 
-		
-
-
-
 		self.message = tk.Message(frame, text=message, relief=tk.RAISED, justify=tk.LEFT, anchor=tk.NW)
 		self.message.pack(fill=tk.BOTH,expand=True, side=tk.LEFT, anchor=tk.NW)
 
@@ -37,11 +33,7 @@ class PasswordWarning(object):
 		goAhead.pack(side=tk.RIGHT)
 
 		self.accepted = None
-
 		
-
-		
-
 	def setStatus(self, boo):
 		self.accepted = boo
 		self.top.destroy()

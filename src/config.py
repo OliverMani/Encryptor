@@ -8,6 +8,6 @@ FILE_CHUNK = 1024**2
 
 #info
 NAME='Encryptor'
-VERSION='v1.0(.1)'
+VERSION='v1.1'
 AUTHOR='Óliver Máni'
 MOTTO='I can\'t stop!'

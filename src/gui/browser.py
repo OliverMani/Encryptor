@@ -14,7 +14,6 @@ import _io_.fileutils as fileutils
 import gui.texteditor as texteditor
 import math
 import config
-import gui.process as process
 
 
 randomSalt = lambda: main.toString([random.generateRandomByte() for x in range(config.SALT_SIZE)])
@@ -371,7 +370,7 @@ class BrowserWindow(Frame):
 	def searchAndSelect(self, search):
 		for x in self.tree.get_children():
 			name = self.tree.item(x)['text'].lower()
-			if search in name.lower():
+			if search.lower() in name.lower():
 				self.tree.selection_set(x)
 				return
 		mbox.showinfo("Search", "No files found with '" + search + "' in the name!")
