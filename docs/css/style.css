@@ -1,7 +1,7 @@
 body {
 	margin: 0;
 	background: #eee;
-	font-family: sans;
+	font-family: monospace;
 }
 
 .nav {
@@ -10,7 +10,6 @@ body {
 	width: 100%;
 	position: fixed;
 	top: 0;
-	font-family: monospace;
 }
 
 .nav ._name {
@@ -48,6 +47,29 @@ body {
 }
 
 .content {
-	height: 100vh;
+	height: 88vh;
 	margin-top: 4em;
+	padding: 1em;
 }
+
+.button {
+	background-color: #1F85DE;
+	width: 10em;
+	color: white;
+	text-align: center;
+	padding: 15px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.button:hover {
+	background: #083f6f;
+}
+
+
+
+
+
+
+

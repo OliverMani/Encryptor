@@ -1,7 +1,28 @@
 .content .preview {
+	width: 30%;
 	float:left;
 }
 
 .content .info {
+	font-size: 1.4em;
+	width: 70%;
 	float:right;
+}
+
+.buttons, .buttons div {
+	display: inline-block;
+}
+
+
+#sc {
+	background: orange;
+	transition: 0.3s;
+}
+
+#sc:hover {
+	background: darkorange;
+}
+
+.buttons a {
+	text-decoration: none;
 }
