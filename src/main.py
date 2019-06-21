@@ -1,11 +1,13 @@
 from gui import login
 from tkinter import messagebox as mb
+from sys import argv
 
 import signal
 import tkinter as tk
 import os
 import platform
 import config
+import console.textbased as console
 
 VALID_SYSTEMS = ['windows', 'darwin', 'linux']
 
@@ -34,13 +36,20 @@ def shutdownHook(signal=None, event=None):
 	deleteCache()
 	exit(0)
 
-def main():
+def main(args=[]):
+	gui = True
+	if len(args) > 1:
+		if args[1] == 'nogui':
+			gui = False
 	config.OS = platform.system().lower()
 	config.DATA_FOLDER += '\\' if config.OS == 'windows' else '/'
 	config.TMP_FOLDER += '\\' if config.OS == 'windows' else '/'
 
 	if config.OS not in VALID_SYSTEMS:
-		mb.showerror("Error", "You can't run Encryptor on this operating system!")
+		if gui:
+			mb.showerror("Error", "You can't run Encryptor on this operating system!")
+		else:
+			print("You can't run Encryptor on this operating system!")
 		return
 
 	signal.signal(signal.SIGINT, shutdownHook)
@@ -54,21 +63,23 @@ def main():
 		os.mkdir(config.TMP_FOLDER, 493)
 
 	# end non windowed process
+	if gui:
+		root = tk.Tk()
+		width = 400
+		height = 260
+		x = (root.winfo_screenwidth() // 2) - (width // 2)
+		y = (root.winfo_screenheight() // 2) - (height // 2)
 
-	root = tk.Tk()
-	width = 400
-	height = 260
-	x = (root.winfo_screenwidth() // 2) - (width // 2)
-	y = (root.winfo_screenheight() // 2) - (height // 2)
+		root.geometry("{}x{}+{}+{}".format(width, height, x, y))
+		root.resizable(False, False)
 
-	root.geometry("{}x{}+{}+{}".format(width, height, x, y))
-	root.resizable(False, False)
+		app = login.LoginWindow([width,height],root)
 
-	app = login.LoginWindow([width,height],root)
-
-	root.mainloop()
+		root.mainloop()
+	else:
+		console.init(args[1:])
 
 # Initialize the entire program
 if __name__ == "__main__":
-	main()
+	main(argv)
 	shutdownHook(None, None)

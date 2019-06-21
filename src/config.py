@@ -11,3 +11,25 @@ NAME='Encryptor'
 VERSION='v1.1'
 AUTHOR='Óliver Máni'
 MOTTO='I can\'t stop!'
+
+TYPE_NAMES = {
+	'mp4':'Video',
+	'mov':'Video',
+	'webm':'Video',
+	'avi':'Video',
+	'png':'Photo',
+	'jpeg':'Photo',
+	'jpg':'Photo',
+	'gif':'Animated\ photo',
+	'exe':'Windows\ application',
+	'msi':'Windows\ installer',
+	'py':'Python\ script',
+	'js':'Javascript',
+	'html':'HTML\ web\ page',
+	'css':'CSS\ file',
+	'zip':'ZIP\ file',
+	'txt':'Text\ file',
+	'mp3':'Audio',
+	'ogg':'Audio',
+	'wav':'Audio'
+}
