@@ -8,7 +8,7 @@ from tkinter import messagebox as mb
 
 
 WINDOWS = ['windows']
-UNIX = ['darwin', 'linux', 'unix']
+UNIX = ['darwin', 'linux']
 
 # cross-platform
 def openFileWithAnotherProgram(path):
@@ -18,7 +18,10 @@ def openFileWithAnotherProgram(path):
 		os.startfile(path.replace('/', '\\'))
 	elif system in UNIX:
 		#only unix and unix-like systems
-		subprocess.call(['open', path])
+		if system == 'linux':
+			subprocess.call(['xdg-open', path])
+		else:
+			subprocess.call(['open', path])
 
 def openFolder(path):
 	if os.path.isdir(path):
