@@ -64,9 +64,6 @@ class BrowserWindow(Frame):
 		bline1.pack(side=BOTTOM, fill=BOTH)
 		
 
-
-		# TODO
-		# Program texteditor window and open it when you create a file
 		create = Button(bline1, text="Create file", command=lambda: inp.getStringInput(title='Filename', message='Type in file name:', onenter=lambda i: [lambda:x() for x in [self.createFile(i, refresh=True), texteditor.TextEditor(i, self, True)]]))
 		create.pack(side=LEFT, fill=BOTH, expand=True)
 		upload = Button(bline1, text="Upload file", command=lambda: self.uploadFile(askopenfilename()))

@@ -6,6 +6,7 @@ import key_generator as kg
 import config
 import main
 import math
+import action_class as ac
 
 # TODO:
 # Display text
@@ -15,9 +16,10 @@ class TextEditor(Tk):
 		super().__init__()
 		self.title("Editing encrypted file: " + file)
 		self.file = file
-		self.browser = browser
+		
+		self.actions = browser.actions
 
-		name = browser.getEncryptedFileName(self.file)
+		name = self.actions.getEncryptedFileName(self.file)
 		with open(config.DATA_FOLDER + name, 'rb') as read:
 			self.encryptedSalt = read.read(config.SALT_SIZE)
 		del name
@@ -49,12 +51,12 @@ class TextEditor(Tk):
 		self.writeEncryptedText()
 
 	def readDecryptedText(self):
-		realname = self.browser.getEncryptedFileName(self.file)
+		realname = self.actions.getEncryptedFileName(self.file)
 		read = open(config.DATA_FOLDER + realname, 'rb')
 		data = read.read()[config.SALT_SIZE:]
 		read.close()
-		salt = self.browser.getSaltOfFile(realname)
-		keys = self.browser.mkkey(min(len(data), kg.MAX), salt)
+		salt = self.actions.getSaltOfFile(realname)
+		keys = self.actions.mkkey(min(len(data), kg.MAX), salt)
 		del salt
 		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		del keys
@@ -66,10 +68,10 @@ class TextEditor(Tk):
 		
 
 	def writeEncryptedText(self):
-		name = self.browser.getEncryptedFileName(self.file)
+		name = self.actions.getEncryptedFileName(self.file)
 		text = self.text.get("1.0", "end-1c")
-		salt = self.browser.getSaltOfFile(name)
-		keys = self.browser.mkkey(len(text) % kg.MAX, salt)
+		salt = self.actions.getSaltOfFile(name)
+		keys = self.actions.mkkey(len(text) % kg.MAX, salt)
 
 		crypto = cryptography.DoubleCryptography(keys['pad'], keys['xor'])
 		del keys
