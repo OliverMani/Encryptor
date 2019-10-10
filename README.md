@@ -6,3 +6,6 @@ Ef þú niðurhalar kóðanum og ætlar að keyra hann með python mæli ég me�
 
 ## English:
 If you download the code and want to run it with python I recommend you to run "run.sh" if you're using a UNIX-like system or "windows.bat" if you're using Windows, or the encrypted files will get mixed with the code
+
+## Vefsíða/Website:
+https://olivermani.github.io/Encryptor/
