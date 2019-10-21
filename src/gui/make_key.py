@@ -11,7 +11,6 @@ class WordsKeyGenerateWindow(Tk):
 	def get_random_words(self):
 		data = [random.generateRandomByte() for x in range(config.WORDS_LIST_LENGTH)]
 		words = []
-		print(data)
 		for x in data:
 			if config.WORDS[x][0] in words:
 				words.append(config.WORDS[x][1])

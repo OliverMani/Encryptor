@@ -7,7 +7,7 @@ import tkinter as tk
 import os
 import platform
 import config
-import console.textbased as console
+#import console.textbased as console
 
 VALID_SYSTEMS = ['windows', 'darwin', 'linux']
 
