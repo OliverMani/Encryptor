@@ -9,7 +9,7 @@ WORDS_LIST_LENGTH = 25
 
 #info
 NAME='Encryptor'
-VERSION='v1.1'
+VERSION='v1.2'
 AUTHOR='Óliver Máni'
 MOTTO='No password required anymore!'
 
